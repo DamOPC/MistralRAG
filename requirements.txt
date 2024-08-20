@@ -5,3 +5,4 @@ numpy~=1.26.0
 matplotlib~=3.8.0
 ipython~=8.16.1
 PyPDF2
+nbformat
