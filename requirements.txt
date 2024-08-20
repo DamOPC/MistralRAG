@@ -8,3 +8,4 @@ langchain-community
 PyPDF2
 docx2txt
 streamlit_chat
+nbformat
