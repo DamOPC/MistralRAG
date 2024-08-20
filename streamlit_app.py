@@ -11,12 +11,12 @@ import streamlit as st
 from streamlit_chat import message
 
 # LangChain Imports
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Langchain Imports
-from langchain.document_loaders import Docx2txtLoader
-from langchain.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
@@ -26,14 +26,14 @@ from langchain.chains import LLMChain
 from langchain.chains import ConversationalRetrievalChain
 
 # Mistral Imports
-from langchain.llms import Ollama
+from langchain_community.llms import Ollama
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.embeddings import OllamaEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 
 # Mistral Settings
-embeddings_open = OllamaEmbeddings(model="mistral")
-llm_open = Ollama(model="mistral", temperature=0.2,
+embeddings_open = OllamaEmbeddings(model="llama3:latest")
+llm_open = Ollama(model="llama3:latest", temperature=0.0,
                          callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
 
 
@@ -249,9 +249,9 @@ if user_input:
         with st.spinner("Fetching answer ..."):
 
             # ------------------- RAG CHAIN ----------------- #
-            if text is not None:
+            if transcript is not None:
                 text_splitter = CharacterTextSplitter(chunk_size=200, chunk_overlap=50)
-                chunks = text_splitter.split_text(text)
+                chunks = text_splitter.split_text(transcript)
 
                 knowledge_base = Chroma.from_texts(chunks, embeddings_open, persist_directory="./chroma_db")
                 docs = knowledge_base.similarity_search(st.session_state.transcript)
@@ -282,6 +282,13 @@ if user_input:
                                                        retriever=knowledge_base.as_retriever(search_kwargs={"k": 2}),
                                                        chain_type_kwargs={"prompt": build_prompt("template_1")})
                 answer = qa_chain({"query": st.session_state.transcript})
+                result = answer["result"]
+
+            elif application_type == "Mistral LLM":
+                llm = Ollama(model="mistral", temperature=0,
+                             callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
+
+                answer = llm(st.session_state.transcript)
                 result = answer["result"]
 
             answer = result
