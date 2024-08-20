@@ -7,3 +7,4 @@ ipython~=8.16.1
 PyPDF2
 nbformat
 docx2txt
+streamlit_chat
