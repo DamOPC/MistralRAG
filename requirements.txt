@@ -10,3 +10,4 @@ docx2txt
 streamlit_chat
 nbformat
 protobuf==4.21.11
+newrelic.agent
