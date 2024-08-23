@@ -5,6 +5,7 @@ import tempfile
 from PyPDF2 import PdfReader
 import nbformat
 import docx2txt
+import chromadb
 
 # Streamlit Imports
 import streamlit as st
