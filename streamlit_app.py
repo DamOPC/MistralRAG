@@ -6,7 +6,8 @@ from PyPDF2 import PdfReader
 import nbformat
 import docx2txt
 import newrelic.agent
-import opentelemetry.exporter.otlp.proto.http.metric_exporter
+settings = newrelic.agent.global_settings()
+settings.debug.otlp_content_encoding = "json"
 
 # Streamlit Imports
 import streamlit as st
