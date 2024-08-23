@@ -9,4 +9,5 @@ PyPDF2
 docx2txt
 streamlit_chat
 nbformat
+protobuf==3.20.*
 chromadb
